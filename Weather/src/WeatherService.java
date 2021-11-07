@@ -70,16 +70,17 @@ public class WeatherService {
 		return root.getMain().getPressure();
 	}
 
-	public Icon getIcon() {
+	public Icon getIcon(Class c) {
 		try {
 			List<Weather> list = root.getWeather();
 			Image img = null;
 			for (Weather w : list) {
-				img = new ImageIcon(this.getClass().getResource(w.getIcon().trim() + ".png")).getImage();
+				img = new ImageIcon(c.getResource(w.getIcon().trim() + ".png")).getImage();
 			}
 			return new ImageIcon(img);
 		} catch (Exception e) {
-			return null;
+			Image img2 = new ImageIcon(c.getResource("01d.png")).getImage();
+			return new ImageIcon(img2);
 		}
 	}
 }

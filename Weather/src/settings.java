@@ -1,14 +1,16 @@
 import java.awt.AWTException;
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JPopupMenu;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.TextAction;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -22,15 +24,13 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.awt.Dimension;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextPane;
 
 public class settings extends JFrame {
 
@@ -118,12 +118,15 @@ public class settings extends JFrame {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		
 		city_name = new JTextField();
+		addPopupMenu(city_name);
 		city_name.setColumns(10);
 		
 		lblNewLabel_1 = new JLabel("State code");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		
 		state_code = new JTextField();
+		addPopupMenu(state_code);
+		
 		state_code.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -173,6 +176,42 @@ public class settings extends JFrame {
 			trayIcon.displayMessage(title, message, type);
 		} else {
 			System.err.println("System tray not supported!");
+		}
+	}
+	private static void addPopupMenu(JTextField text) {
+		JPopupMenu menu = new JPopupMenu();
+		
+		
+		Action cut = new DefaultEditorKit.CutAction();
+		cut.putValue(Action.NAME, "cut");
+		cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+		menu.add(cut);
+		
+		Action copy = new DefaultEditorKit.CopyAction();
+		copy.putValue(Action.NAME, "copy");
+		copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+		menu.add(copy);
+		
+		Action paste = new DefaultEditorKit.PasteAction();
+		paste.putValue(Action.NAME, "paste");
+		paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+		menu.add(paste);
+		
+		Action selectAll = new SelectAll();
+		menu.add(selectAll);
+		
+		text.setComponentPopupMenu(menu);
+	}
+	public static class SelectAll extends TextAction {
+		
+		public SelectAll() {
+			super("Select All");
+			putValue(Action.ACCELERATOR_KEY , KeyStroke.getKeyStroke("control S"));
+		}
+		public void actionPerformed(ActionEvent e) {
+			JTextComponent componenet = getFocusedComponent();
+			componenet.selectAll();
+			componenet.requestFocusInWindow();
 		}
 	}
 }

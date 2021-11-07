@@ -106,6 +106,7 @@ public class GUI extends JFrame {
 						e1.printStackTrace();
 					}
 				} else {
+					defaultValue();
 					try {
 						showNotification("No internet", "check your internet connection.", MessageType.WARNING);
 					} catch (AWTException e2) {
@@ -198,6 +199,7 @@ public class GUI extends JFrame {
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 		
+		
 		File file = new File(userPath + File.separator + "Weather");
 		if(!file.exists()) {
 			file.mkdirs();
@@ -206,6 +208,7 @@ public class GUI extends JFrame {
 		if (isConnected()) {
 			refresh();
 		} else {
+			defaultValue();
 			try {
 				showNotification("check your internet connection.", "No internet", MessageType.WARNING);
 			} catch (AWTException e) {
@@ -216,7 +219,7 @@ public class GUI extends JFrame {
 
 	private void refresh() {
 		File file = new File(userPath + File.separator + "Weather");
-		String path = userPath + File.separator + "Weather" + "/" + "data.ser";
+		String path = userPath + File.separator + "Weather" + File.separator + "data.ser";
 		File file2 = new File(path);
 		location l = new location("Tehran , IR");
 		location l2 = null;
@@ -246,7 +249,8 @@ public class GUI extends JFrame {
 		visibility.setText("Visibility: " + (service.getVisibility() / 1000) + "KM");
 		humidity.setText("Humidity: " + service.getHumidity() + "%");
 		pressure.setText("Pressure: " + service.getPressure());
-		icon1.setIcon(service.getIcon());
+		icon1.setIcon(service.getIcon(GUI.class));
+		
 	}
 
 	private boolean isConnected() {
@@ -262,8 +266,8 @@ public class GUI extends JFrame {
 		}
 
 	}
-
-	public static void showNotification(String title, String message, MessageType type) throws AWTException {
+	//tray notification
+	private void showNotification(String title, String message, MessageType type) throws AWTException {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			Image image = Toolkit.getDefaultToolkit().createImage(GUI.class.getResource("ic_warning.png"));
@@ -275,6 +279,16 @@ public class GUI extends JFrame {
 		} else {
 			System.err.println("System tray not supported!");
 		}
+	}
+	private void defaultValue() {
+		temp.setText("Fahrenheit");
+		feels_like.setText("Feels like");
+		wind.setText("Wind:");
+		visibility.setText("Visibility:");
+		humidity.setText("Humidity:");
+		pressure.setText("Pressure:");
+		Image icon = new ImageIcon(this.getClass().getResource("01d.png")).getImage();
+		icon1.setIcon(new ImageIcon(icon));
 	}
 	
 }
