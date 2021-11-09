@@ -210,7 +210,7 @@ public class GUI extends JFrame {
 		} else {
 			defaultValue();
 			try {
-				showNotification("check your internet connection.", "No internet", MessageType.WARNING);
+				showNotification("No Internet", "check your internet connection.", MessageType.WARNING);
 			} catch (AWTException e) {
 				e.printStackTrace();
 			}
@@ -275,7 +275,7 @@ public class GUI extends JFrame {
 			trayIcon.setImageAutoSize(true);
 			trayIcon.setToolTip("Weather");
 			tray.add(trayIcon);
-			trayIcon.displayMessage(message, title, type);
+			trayIcon.displayMessage(title, message, type);
 		} else {
 			System.err.println("System tray not supported!");
 		}
