@@ -91,7 +91,7 @@ public class settings extends JFrame {
 				String stateCode = state_code.getText().trim();
 				if(cityName.length() == 0 && stateCode.length() == 0) {
 					try {
-						showNotification("enter" , "enter city name and sate code" , MessageType.WARNING);
+						showNotification("enter city name and sate code" , "enter" , MessageType.WARNING);
 					} catch (AWTException e1) {
 						e1.printStackTrace();
 					}
@@ -102,7 +102,7 @@ public class settings extends JFrame {
 					try {
 						locationManager.write(path , l);
 						try {
-							showNotification("Location" , "Location data saved" , MessageType.INFO);
+							showNotification("Location data saved" , "Location" , MessageType.INFO);
 						} catch (AWTException e2) {
 							e2.printStackTrace();
 						}
@@ -173,7 +173,7 @@ public class settings extends JFrame {
 			trayIcon.setImageAutoSize(true);
 			trayIcon.setToolTip("Weather");
 			tray.add(trayIcon);
-			trayIcon.displayMessage(title, message, type);
+			trayIcon.displayMessage(message, title, type);
 		} else {
 			System.err.println("System tray not supported!");
 		}

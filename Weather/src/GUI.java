@@ -275,7 +275,7 @@ public class GUI extends JFrame {
 			trayIcon.setImageAutoSize(true);
 			trayIcon.setToolTip("Weather");
 			tray.add(trayIcon);
-			trayIcon.displayMessage(title, message, type);
+			trayIcon.displayMessage(message, title, type);
 		} else {
 			System.err.println("System tray not supported!");
 		}
