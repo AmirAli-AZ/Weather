@@ -16,14 +16,14 @@ public class WeatherService {
 	private String LOCATION = "";
 	private String URL = "";
 	private String jsonCode;
-	private Root root;
+	private Root root = null;
 
-	public WeatherService(String api_key , String location) {
+	public WeatherService(String api_key, String location) {
 		this.API_KEY = api_key;
 		this.LOCATION = location;
-		this.URL = "http://api.openweathermap.org/data/2.5/weather?q=" + LOCATION + " &appid="
-				+ API_KEY + "&units=imperial";
-		
+		this.URL = "http://api.openweathermap.org/data/2.5/weather?q=" + LOCATION + " &appid=" + API_KEY
+				+ "&units=imperial";
+
 		try {
 			StringBuilder builder = new StringBuilder();
 			URL url = new URL(URL);
@@ -38,47 +38,48 @@ public class WeatherService {
 			ObjectMapper ob = new ObjectMapper();
 			root = ob.readValue(jsonCode, Root.class);
 		} catch (Exception e) {
+			root = null;
 			e.printStackTrace();
 		}
 	}
 
 	public double getTemp() {
-		return root.getMain().getTemp();
+		return ((root != null) ? root.getMain().getTemp() : 0);
 	}
 
 	public double feelsLike() {
-		return root.getMain().getFeels_like();
+		return ((root != null) ? root.getMain().getFeels_like() : 0);
 	}
 
 	public double getSpeed() {
-		return root.getWind().getSpeed();
+		return ((root != null) ? root.getWind().getSpeed() : 0);
 	}
 
 	public double getDeg() {
-		return root.getWind().getDeg();
+		return ((root != null) ? root.getWind().getDeg() : 0);
 	}
 
 	public int getVisibility() {
-		return root.getVisibility();
+		return ((root != null) ? root.getVisibility() : 0);
 	}
 
 	public int getHumidity() {
-		return root.getMain().getHumidity();
+		return ((root != null) ? root.getMain().getHumidity() : 0);
 	}
 
 	public int getPressure() {
-		return root.getMain().getPressure();
+		return ((root != null) ? root.getMain().getPressure() : 0);
 	}
 
-	public Icon getIcon(Class c) {
-		try {
+	public Icon getIcon(Class<?> c) {
+		if (root != null) {
 			List<Weather> list = root.getWeather();
 			Image img = null;
 			for (Weather w : list) {
 				img = new ImageIcon(c.getResource(w.getIcon().trim() + ".png")).getImage();
 			}
 			return new ImageIcon(img);
-		} catch (Exception e) {
+		} else {
 			Image img2 = new ImageIcon(c.getResource("01d.png")).getImage();
 			return new ImageIcon(img2);
 		}
