@@ -15,15 +15,15 @@ public class Main {
 	double temp;
 
 	@JsonProperty("feels_like")
-	public double getFeels_like() {
+	public int getFeels_like() {
 		return this.feels_like;
 	}
 
-	public void setFeels_like(double feels_like) {
+	public void setFeels_like(int feels_like) {
 		this.feels_like = feels_like;
 	}
 
-	double feels_like;
+	int feels_like;
 
 	@JsonProperty("temp_min")
 	public double getTemp_min() {

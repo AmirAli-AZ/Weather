@@ -1,24 +1,15 @@
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import graphics.panelGraphics;
 import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.awt.AWTException;
-import java.awt.Color;
 import javax.swing.ImageIcon;
-import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -28,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.*;
 
 public class GUI extends JFrame {
 
@@ -44,6 +36,7 @@ public class GUI extends JFrame {
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmNewMenuItem_1;
 	private final String userPath = System.getProperty("user.home");
+	private static boolean showDialog = false;
 
 	/**
 	 * Launch the application.
@@ -54,6 +47,13 @@ public class GUI extends JFrame {
 				try {
 					GUI frame = new GUI();
 					frame.setVisible(true);
+					
+					if(showDialog) {
+						noConnection dialog = new noConnection(frame);
+						if (dialog.doModal() == noConnection.CANCEL) {
+							showDialog = false;
+						}
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,14 +69,14 @@ public class GUI extends JFrame {
 		setMinimumSize(new Dimension(596, 336));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 596, 336);
-		
+
 		menuBar = new JMenuBar();
 		menuBar.setBackground(Color.WHITE);
 		setJMenuBar(menuBar);
-		
+
 		mnNewMenu = new JMenu("More");
 		menuBar.add(mnNewMenu);
-		
+
 		Image img2 = new ImageIcon(this.getClass().getResource("ic_settings.png")).getImage();
 		mntmNewMenuItem = new JMenuItem("Settings");
 		mntmNewMenuItem.setBackground(Color.WHITE);
@@ -85,13 +85,13 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// close the JFrame
 				dispose();
-				
+
 				settings s = new settings();
 				s.setVisible(true);
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
-		
+
 		Image img3 = new ImageIcon(this.getClass().getResource("ic_refresh2.png")).getImage();
 		mntmNewMenuItem_1 = new JMenuItem("Refresh");
 		mntmNewMenuItem_1.setBackground(Color.WHITE);
@@ -99,19 +99,16 @@ public class GUI extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (isConnected()) {
-					refresh();
 					try {
 						showNotification("Refreshing", "datas is refreshing...", MessageType.INFO);
 					} catch (AWTException e1) {
 						e1.printStackTrace();
 					}
+					refresh();
 				} else {
 					defaultValue();
-					try {
-						showNotification("No internet", "check your internet connection.", MessageType.WARNING);
-					} catch (AWTException e2) {
-						e2.printStackTrace();
-					}
+					noConnection dialog = new noConnection(GUI.this);
+					if (dialog.doModal() == noConnection.CANCEL) {}
 				}
 			}
 		});
@@ -144,43 +141,32 @@ public class GUI extends JFrame {
 		pressure = new JLabel("Pressure:");
 		pressure.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(5)
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(15)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+				.createSequentialGroup()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(5).addComponent(panel,
+								GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(15).addGroup(gl_contentPane
+								.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(temp, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-									.addGap(10))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(feels_like, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-									.addGap(239)))
-							.addGap(25)
-							.addComponent(icon1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addGap(5))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(44)
-							.addComponent(temp)
-							.addGap(11)
-							.addComponent(feels_like, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(26)
-							.addComponent(icon1, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)))
-					.addGap(18)
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-					.addGap(6))
-		);
+										.addComponent(temp, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE).addGap(10))
+								.addGroup(
+										gl_contentPane.createSequentialGroup()
+												.addComponent(feels_like, GroupLayout.PREFERRED_SIZE, 0,
+														Short.MAX_VALUE)
+												.addGap(239)))
+								.addGap(25)
+								.addComponent(icon1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)))
+				.addGap(5)));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
+				.createSequentialGroup()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(44).addComponent(temp).addGap(11)
+								.addComponent(feels_like, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup().addGap(26).addComponent(icon1,
+								GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)))
+				.addGap(18).addComponent(panel, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE).addGap(6)));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup().addGap(10)
@@ -198,23 +184,19 @@ public class GUI extends JFrame {
 				.addGap(50)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
-		
-		
+
 		File file = new File(userPath + File.separator + "Weather");
-		if(!file.exists()) {
+		if (!file.exists()) {
 			file.mkdirs();
 		}
-		
-		if (isConnected()) {
+
+		if(isConnected()) {
 			refresh();
-		} else {
+		}else {
 			defaultValue();
-			try {
-				showNotification("No Internet", "check your internet connection.", MessageType.WARNING);
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			showDialog = true;
 		}
+		
 	}
 
 	private void refresh() {
@@ -223,18 +205,18 @@ public class GUI extends JFrame {
 		File file2 = new File(path);
 		location l = new location("Tehran , IR");
 		location l2 = null;
-		
-		if(!file.exists()) {
+
+		if (!file.exists()) {
 			file.mkdirs();
 		}
-		if(!file2.exists()) {
+		if (!file2.exists()) {
 			try {
-				locationManager.write(path , l);
+				locationManager.write(path, l);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		try {
 			l2 = locationManager.read(path);
 		} catch (ClassNotFoundException e) {
@@ -242,7 +224,7 @@ public class GUI extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		WeatherService service = new WeatherService("cfcdd2d8f10c170bb627e8812f1a6fe3" , l2.getLocation());
+		WeatherService service = new WeatherService("cfcdd2d8f10c170bb627e8812f1a6fe3", l2.getLocation());
 		temp.setText("Fahrenheit " + service.getTemp());
 		feels_like.setText("Feels like " + service.feelsLike());
 		wind.setText("Wind: " + service.getSpeed() + "/" + service.getDeg());
@@ -250,7 +232,7 @@ public class GUI extends JFrame {
 		humidity.setText("Humidity: " + service.getHumidity() + "%");
 		pressure.setText("Pressure: " + service.getPressure());
 		icon1.setIcon(service.getIcon(GUI.class));
-		
+
 	}
 
 	private boolean isConnected() {
@@ -266,7 +248,8 @@ public class GUI extends JFrame {
 		}
 
 	}
-	//tray notification
+
+	// tray notification
 	private void showNotification(String title, String message, MessageType type) throws AWTException {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
@@ -280,15 +263,15 @@ public class GUI extends JFrame {
 			System.err.println("System tray not supported!");
 		}
 	}
+
 	private void defaultValue() {
-		temp.setText("Fahrenheit");
-		feels_like.setText("Feels like");
-		wind.setText("Wind:");
-		visibility.setText("Visibility:");
-		humidity.setText("Humidity:");
-		pressure.setText("Pressure:");
+		temp.setText("Fahrenheit " + 0);
+		feels_like.setText("Feels like " + 0);
+		wind.setText("Wind: " + 0 + "/" + 0);
+		visibility.setText("Visibility: " + 0 + "KM");
+		humidity.setText("Humidity: " + 0 + "%");
+		pressure.setText("Pressure: " + 0);
 		Image icon = new ImageIcon(this.getClass().getResource("01d.png")).getImage();
 		icon1.setIcon(new ImageIcon(icon));
 	}
-	
 }
