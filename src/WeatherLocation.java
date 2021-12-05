@@ -1,10 +1,10 @@
 import java.io.Serializable;
 
-public class location implements Serializable {
+public class WeatherLocation implements Serializable {
 	
 	private String LOCATION = "Tehran , IR";
 	
-	public location(String l) {
+	public WeatherLocation(String l) {
 		this.LOCATION = l;
 	}
 	public String getLocation() {

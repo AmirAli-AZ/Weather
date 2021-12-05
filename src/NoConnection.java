@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.Frame;
 
 
-public class noConnection extends JDialog {
+public class NoConnection extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	public static int OK = 1;
@@ -24,7 +24,7 @@ public class noConnection extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public noConnection(Frame owner) {
+	public NoConnection(Frame owner) {
 		super(owner);
 		setTitle("No Conncetion");
 		setResizable(false);

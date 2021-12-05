@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import graphics.panelGraphics;
+import graphics.PanelGraphics;
 import javax.swing.JLabel;
 import java.awt.TrayIcon.MessageType;
 import java.io.File;
@@ -16,7 +16,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
-import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;
@@ -49,8 +48,8 @@ public class GUI extends JFrame {
 					frame.setVisible(true);
 					
 					if(showDialog) {
-						noConnection dialog = new noConnection(frame);
-						if (dialog.doModal() == noConnection.CANCEL) {
+						NoConnection dialog = new NoConnection(frame);
+						if (dialog.doModal() == NoConnection.CANCEL) {
 							showDialog = false;
 						}
 					}
@@ -86,7 +85,7 @@ public class GUI extends JFrame {
 				// close the JFrame
 				dispose();
 
-				settings s = new settings();
+				Settings s = new Settings();
 				s.setVisible(true);
 			}
 		});
@@ -100,15 +99,15 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (isConnected()) {
 					try {
-						showNotification("Refreshing", "datas is refreshing...", MessageType.INFO);
+						showNotification("Refreshing", "data is refreshing...", MessageType.INFO);
 					} catch (AWTException e1) {
 						e1.printStackTrace();
 					}
 					refresh();
 				} else {
 					defaultValue();
-					noConnection dialog = new noConnection(GUI.this);
-					if (dialog.doModal() == noConnection.CANCEL) {}
+					NoConnection dialog = new NoConnection(GUI.this);
+					if (dialog.doModal() == NoConnection.CANCEL) {}
 				}
 			}
 		});
@@ -126,7 +125,7 @@ public class GUI extends JFrame {
 		feels_like = new JLabel("Feels like");
 		feels_like.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
-		JPanel panel = new panelGraphics(true);
+		JPanel panel = new PanelGraphics(true);
 		panel.setForeground(Color.LIGHT_GRAY);
 
 		wind = new JLabel("Wind:");
@@ -198,22 +197,22 @@ public class GUI extends JFrame {
 		File file = new File(userPath + File.separator + "Weather");
 		String path = userPath + File.separator + "Weather" + File.separator + "data.ser";
 		File file2 = new File(path);
-		location l = new location("Tehran , IR");
-		location l2 = null;
+		WeatherLocation l = new WeatherLocation("Tehran , IR");
+		WeatherLocation l2 = null;
 
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 		if (!file2.exists()) {
 			try {
-				locationManager.write(path, l);
+				WeatherLocationManager.write(path, l);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 
 		try {
-			l2 = locationManager.read(path);
+			l2 = WeatherLocationManager.read(path);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

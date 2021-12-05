@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import java.awt.Color;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
@@ -32,7 +31,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class settings extends JFrame {
+public class Settings extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
@@ -48,7 +47,7 @@ public class settings extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					settings frame = new settings();
+					Settings frame = new Settings();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,7 +59,7 @@ public class settings extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public settings() {
+	public Settings() {
 		setMinimumSize(new Dimension(596, 336));
 		setTitle("Settings");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,18 +90,18 @@ public class settings extends JFrame {
 				String stateCode = state_code.getText().trim();
 				if(cityName.length() == 0 && stateCode.length() == 0) {
 					try {
-						showNotification("enter" , "enter city name and sate code" , MessageType.WARNING);
+						showNotification("Weather" , "enter city name and sate code" , MessageType.WARNING);
 					} catch (AWTException e1) {
 						e1.printStackTrace();
 					}
 				}else {
 					String location = cityName + "," + stateCode;
-					location l = new location(location);
+					WeatherLocation l = new WeatherLocation(location);
 					String path = userPath + File.separator + "Weather" + File.separator + "data.ser";
 					try {
-						locationManager.write(path , l);
+						WeatherLocationManager.write(path , l);
 						try {
-							showNotification("Location" , "Location data saved" , MessageType.INFO);
+							showNotification("Location" , "Location saved" , MessageType.INFO);
 						} catch (AWTException e2) {
 							e2.printStackTrace();
 						}
@@ -168,7 +167,7 @@ public class settings extends JFrame {
 	public static void showNotification(String title, String message, MessageType type) throws AWTException {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
-			Image image = Toolkit.getDefaultToolkit().createImage(settings.class.getResource("ic_warning.png"));
+			Image image = Toolkit.getDefaultToolkit().createImage(Settings.class.getResource("ic_warning.png"));
 			TrayIcon trayIcon = new TrayIcon(image, "Tray Demo");
 			trayIcon.setImageAutoSize(true);
 			trayIcon.setToolTip("Weather");

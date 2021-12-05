@@ -3,7 +3,7 @@ package graphics;
 import java.awt.*;
 import javax.swing.*;
 
-public class panelGraphics extends JPanel {
+public class PanelGraphics extends JPanel {
 	/** Stroke size. it is recommended to set it to 1 for better view */
 	private int strokeSize = 1;
 	/** Color of shadow */
@@ -21,7 +21,7 @@ public class panelGraphics extends JPanel {
 	/** The transparency value of shadow. ( 0 - 255) */
 	private int shadowAlpha = 90;
 
-	public panelGraphics(boolean shadow) {
+	public PanelGraphics(boolean shadow) {
 		super();
 		setOpaque(false);
 		this.shady = shadow;

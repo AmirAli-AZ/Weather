@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class locationManager {
-	private static location l = null;
+public class WeatherLocationManager {
+	private static WeatherLocation l = null;
 
-	public static void write(String path, location l) throws IOException {
+	public static void write(String path, WeatherLocation l) throws IOException {
 		FileOutputStream fileOut = new FileOutputStream(path);
 		ObjectOutputStream ob = new ObjectOutputStream(fileOut);
 		ob.writeObject(l);
@@ -15,10 +15,10 @@ public class locationManager {
 		fileOut.close();
 	}
 
-	public static location read(String path) throws IOException, ClassNotFoundException {
+	public static WeatherLocation read(String path) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = new FileInputStream(path);
 		ObjectInputStream ob = new ObjectInputStream(fileIn);
-		l = (location) ob.readObject();
+		l = (WeatherLocation) ob.readObject();
 		ob.close();
 		fileIn.close();
 		return l;
